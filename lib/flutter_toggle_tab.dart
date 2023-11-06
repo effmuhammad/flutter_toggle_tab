@@ -21,7 +21,7 @@ class FlutterToggleTab extends StatefulWidget {
   /// is Scroll by default is set to Enable
   const FlutterToggleTab({
     Key? key,
-    required this.labels,
+    this.labels,
     required this.selectedLabelIndex,
     required this.selectedTextStyle,
     required this.unSelectedTextStyle,
@@ -40,7 +40,7 @@ class FlutterToggleTab extends StatefulWidget {
     this.isShadowEnable = true,
   }) : super(key: key);
 
-  final List<String> labels;
+  final List<String>? labels;
   final List<IconData?>? icons;
   final double? iconSize;
   final int selectedIndex;
@@ -73,8 +73,8 @@ class _FlutterToggleTabState extends State<FlutterToggleTab> {
   void _setDefaultSelected() {
     setState(() {
       /// loops label from widget labels
-      for (int x = 0; x < widget.labels.length; x++) {
-        _labels.add(DataTab(title: widget.labels[x], isSelected: false));
+      for (int x = 0; x < widget.labels!.length; x++) {
+        _labels.add(DataTab(title: widget.labels![x], isSelected: false));
       }
     });
   }
@@ -96,6 +96,9 @@ class _FlutterToggleTabState extends State<FlutterToggleTab> {
       }
 
       /// Update selectedIndex isSelected to True
+      _labels = widget.labels!
+          .map((e) => DataTab(title: e, isSelected: false))
+          .toList();
       _labels[widget.selectedIndex].isSelected = true;
     });
   }
@@ -110,7 +113,7 @@ class _FlutterToggleTabState extends State<FlutterToggleTab> {
         : widthInPercent(100, context);
 
     /// Show text error if length less 1
-    return widget.labels.length <= 1
+    return widget.labels!.length <= 1
         ? Text(
             "Error : Label should >1",
             style: TextStyle(
@@ -177,7 +180,7 @@ class _FlutterToggleTabState extends State<FlutterToggleTab> {
                             ]
                           : widget.unSelectedBackgroundColors)
                       : [Color(0xffe0e0e0), Color(0xffe0e0e0)],
-                  width: width / widget.labels.length,
+                  width: width / widget.labels!.length,
                   title: _labels[index].title,
                   icons: icon,
                   iconSize: widget.iconSize,
